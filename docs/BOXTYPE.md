@@ -81,11 +81,11 @@ type UpdateBoxTypeDTO = Partial<CreateBoxTypeDTO>;
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { CreateBoxTypeDTO } from './BoxType';
+// import { CreateBoxTypeDTO } from './BoxType'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const newBoxTypeData: CreateBoxTypeDTO = {
+const newBoxTypeData = { // CreateBoxTypeDTO type assumed to be available
   code: 'BT001',
   prefix: 'BX',
   default_reserve: 10,
@@ -95,28 +95,55 @@ const newBoxTypeData: CreateBoxTypeDTO = {
     not_implanted: { fillColor: '#FFA500A6' },
     draft: { fillColor: '#FFA500A6' },
   },
+  // brand, default_template, mold, default_level, description, external_id are optional
 };
 
 sdk.boxType.create(newBoxTypeData).then((boxType) => {
   console.log('BoxType created:', boxType);
 });
 ```
+Response example:
+```json
+{
+  "_id": "boxTypeId123",
+  "code": "BT001",
+  "prefix": "BX",
+  "default_reserve": 10,
+  "config": {
+    "base": { "color": "#3388FFFF" },
+    "regular": { "fillColor": "#3388FFFF" },
+    "not_implanted": { "fillColor": "#FFA500A6" },
+    "draft": { "fillColor": "#FFA500A6" }
+  },
+  "brand": null,
+  "default_template": "defaultTemplateId",
+  "mold": null,
+  "default_level": null,
+  "description": null,
+  "external_id": null,
+  "createdAt": "2023-10-27T10:00:00.000Z",
+  "updatedAt": "2023-10-27T10:00:00.000Z",
+  "id": "boxTypeId123"
+}
+```
 
 ### Update a BoxType
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { UpdateBoxTypeDTO } from './BoxType';
+// import { UpdateBoxTypeDTO } from './BoxType'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const updateBoxTypeData: UpdateBoxTypeDTO = {
+const updateBoxTypeData = { // UpdateBoxTypeDTO type assumed to be available
   description: 'Updated description',
 };
 
 sdk.boxType.updateById('boxTypeId', updateBoxTypeData).then(() => {
   console.log('BoxType updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 ### Fetching boxTypes
 
@@ -179,6 +206,30 @@ sdk.boxType.findById('boxTypeId').then((boxType) => {
   console.log('boxType:', boxType);
 });
 ```
+Response example:
+```json
+{
+  "_id": "boxTypeId123",
+  "code": "BT001",
+  "prefix": "BX",
+  "default_reserve": 10,
+  "config": {
+    "base": { "color": "#3388FFFF" },
+    "regular": { "fillColor": "#3388FFFF" },
+    "not_implanted": { "fillColor": "#FFA500A6" },
+    "draft": { "fillColor": "#FFA500A6" }
+  },
+  "brand": "SuperBrand",
+  "default_template": "defaultTemplateId",
+  "mold": "MoldXYZ",
+  "default_level": 1,
+  "description": "This is a specific box type.",
+  "external_id": "ext-bt-001",
+  "createdAt": "2023-10-27T10:00:00.000Z",
+  "updatedAt": "2023-10-27T10:05:00.000Z",
+  "id": "boxTypeId123"
+}
+```
 
 ### Deleting a boxType
 
@@ -190,4 +241,6 @@ const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 sdk.boxType.deleteById('boxTypeId').then(() => {
   console.log('boxType deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```

@@ -15,6 +15,7 @@ type BoxTemplate = {
   positions: object;
   topology: object;
   description?: string;
+  external_id?: any;
 };
 ```
 
@@ -37,7 +38,13 @@ type CreateBoxTemplateDTO = {
 Defines the structure for updating a box template.
 
 ```typescript
-type UpdateBoxTemplateDTO = Partial<CreateBoxTemplateDTO>;
+type UpdateBoxTemplateDTO = {
+  name?: string;
+  structure?: object;
+  positions?: object;
+  topology?: object;
+  description?: string;
+};
 ```
 
 ## Example Usage
@@ -46,38 +53,56 @@ type UpdateBoxTemplateDTO = Partial<CreateBoxTemplateDTO>;
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { CreateBoxTemplateDTO } from './BoxTemplate';
+// import { CreateBoxTemplateDTO } from './BoxTemplate'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const newBoxTemplateData: CreateBoxTemplateDTO = {
+const newBoxTemplateData = { // CreateBoxTemplateDTO type assumed to be available
   name: 'New Template',
-  structure: {},
-  positions: {},
-  topology: {},
+  structure: { /* ... complex object ... */ },
+  positions: { /* ... complex object ... */ },
+  topology: { /* ... complex object ... */ },
   description: 'A new box template',
+  external_id: 'template-ext-001'
 };
 
 sdk.boxTemplate.create(newBoxTemplateData).then((boxTemplate) => {
   console.log('BoxTemplate created:', boxTemplate);
 });
 ```
+Response example:
+```json
+{
+  "_id": "boxTemplateId123",
+  "name": "New Template",
+  "structure": { /* ... */ },
+  "positions": { /* ... */ },
+  "topology": { /* ... */ },
+  "description": "A new box template",
+  "external_id": "template-ext-001",
+  "createdAt": "2023-10-27T10:00:00.000Z",
+  "updatedAt": "2023-10-27T10:00:00.000Z",
+  "id": "boxTemplateId123"
+}
+```
 
 ### Update a BoxTemplate
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { UpdateBoxTemplateDTO } from './BoxTemplate';
+// import { UpdateBoxTemplateDTO } from './BoxTemplate'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const updateBoxTemplateData: UpdateBoxTemplateDTO = {
+const updateBoxTemplateData = { // UpdateBoxTemplateDTO type assumed to be available
   description: 'Updated description',
 };
 
 sdk.boxTemplate.updateById('boxTemplateId', updateBoxTemplateData).then(() => {
   console.log('BoxTemplate updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 
 ### Fetching BoxTemplates
@@ -87,7 +112,7 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-sdk.BoxTemplate.find().then((pagination) => {
+sdk.boxTemplate.find().then((pagination) => { // Corrected: sdk.boxTemplate
   console.log('BoxTemplatees:', pagination);
 });
 ```
@@ -298,9 +323,24 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-sdk.BoxTemplate.findById('BoxTemplateId').then((BoxTemplate) => {
-  console.log('BoxTemplate:', BoxTemplate);
+sdk.boxTemplate.findById('boxTemplateId').then((boxTemplate) => { // Corrected: sdk.boxTemplate and variable name
+  console.log('BoxTemplate:', boxTemplate);
 });
+```
+Response example:
+```json
+{
+  "_id": "boxTemplateId123",
+  "name": "Specific Template",
+  "structure": { /* ... */ },
+  "positions": { /* ... */ },
+  "topology": { /* ... */ },
+  "description": "Details about this specific template.",
+  "external_id": "template-ext-002",
+  "createdAt": "2023-10-26T10:00:00.000Z",
+  "updatedAt": "2023-10-26T10:30:00.000Z",
+  "id": "boxTemplateId123"
+}
 ```
 
 ### Deleting a BoxTemplate
@@ -310,7 +350,9 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-sdk.BoxTemplate.deleteById('BoxTemplateId').then(() => {
+sdk.boxTemplate.deleteById('boxTemplateId').then(() => { // Corrected: sdk.boxTemplate
   console.log('BoxTemplate deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```

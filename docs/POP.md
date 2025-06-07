@@ -119,6 +119,8 @@ const updatePopData: UpdatePopDTO = {
 sdk.pop.updateById('popId', updatePopData).then(() => {
   console.log('Pop updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 
 ### Fetching Pops
@@ -155,4 +157,6 @@ const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 sdk.pop.deleteById('popId').then(() => {
   console.log('Pop deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```

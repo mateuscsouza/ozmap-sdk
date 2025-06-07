@@ -154,6 +154,8 @@ const updateBoxData: UpdateBoxDTO = {
 sdk.box.updateById('boxId', updateBoxData).then(() => {
   console.log('Box updated');
 });
+// The updateById method returns a Promise<void>.
+// To see the updated box, you would typically fetch it again using findById.
 ```
 
 ### Fetching box
@@ -222,6 +224,41 @@ sdk.box.findById('boxId').then((box) => {
   console.log('Box:', box);
 });
 ```
+Response example
+```json
+{
+  "shared": false,
+  "draft": false,
+  "default_reserve": 0,
+  "certified": false,
+  "_id": "boxId123",
+  "tags": [],
+  "coords": [-48.527442812919624, -27.586604372247944],
+  "cables": [],
+  "kind": "Box",
+  "project": "projectId5d9f",
+  "implanted": true,
+  "hierarchyLevel": 2,
+  "boxType": "boxTypeId589",
+  "name": "Specific Box Name",
+  "address": "123 Main St",
+  "pole": "poleIdABC",
+  "color": "colorIdXYZ",
+  "fill_color": "fillColorIdXYZ",
+  "underground": false,
+  "observation": "Optional observation text",
+  "creatorData": {
+    "id": "userId635c",
+    "name": "api_user",
+    "username": "api_user"
+  },
+  "createdAt": "2023-02-01T10:00:00.000Z",
+  "updatedAt": "2023-02-01T10:30:00.000Z",
+  "id": "boxId123",
+  "lng": -48.527442812919624,
+  "lat": -27.586604372247944
+}
+```
 
 ### Deleting a Box
 
@@ -233,4 +270,6 @@ const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 sdk.box.deleteById('boxId').then(() => {
   console.log('Box deleted');
 });
+// The deleteById method returns a Promise<void>.
+// Attempting to fetch this box by ID afterwards would result in an error or null.
 ```

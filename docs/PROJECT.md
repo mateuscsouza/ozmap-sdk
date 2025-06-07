@@ -133,6 +133,8 @@ const updateProjectData: UpdateProjectDTO = {
 sdk.project.updateById('projectId', updateProjectData).then(() => {
   console.log('Project updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 
 ### Fetching Projects
@@ -312,4 +314,6 @@ const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 sdk.project.deleteById('projectId').then(() => {
   console.log('Project deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```

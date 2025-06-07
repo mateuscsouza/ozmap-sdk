@@ -49,7 +49,7 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const newPopData: CreatePopDTO = {
+const newPopData = { // CreatePopDTO definition assumed to be available
   name: "New Pop",
   hierarchyLevel: 1,
   popType: "popTypeId",
@@ -69,7 +69,7 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const updatePopData: UpdatePopDTO = {
+const updatePopData = { // UpdatePopDTO definition assumed to be available
   name: "Updated Pop",
   hierarchyLevel: 2,
 };
@@ -77,6 +77,8 @@ const updatePopData: UpdatePopDTO = {
 sdk.pop.updateById('popId', updatePopData).then(() => {
   console.log('Pop updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 
 ### Fetch
@@ -119,6 +121,8 @@ const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 sdk.pop.deleteById('popId').then(() => {
   console.log('Pop deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```
 
 ## API instance methods
@@ -203,10 +207,12 @@ sdk.apiInstance.delete({
 ### Building
 
 - [Building](./docs/BUILDING.md)
+- [Building Type](./docs/BUILDINGTYPE.md)
 
 ### Cables
 
 - [Cable](./docs/CABLE.md)
+- [Cable Stub](./docs/CABLESTUB.md)
 - [Cable Type](./docs/CABLETYPE.md)
 
 ### Clients
@@ -295,6 +301,7 @@ sdk.apiInstance.delete({
 
 ### POST
 - [Post](./docs/POST.md)
+
 ### Projects
 
 - [Project](./docs/PROJECT.md)
@@ -338,6 +345,43 @@ sdk.apiInstance.delete({
 - [System Configuration](./docs/SYSTEMCONFIG.md)
 - [Tags](./docs/TAG.md)
 - [Users](./docs/USER.md)
+
+### Vertical Condominium
+- [Vertical Condominium](./docs/VERTICALCONDOMINIUM.md)
+- [Vertical Condominium Unit](./docs/VERTICALCONDOMINIUMUNIT.md)
+
+### Warehouse
+- [Warehouse](./docs/WAREHOUSE.md)
+- [Warehouse Item](./docs/WAREHOUSEITEM.md)
+- [Warehouse Item Type](./docs/WAREHOUSEITEMTYPE.md)
+
+
+## Documentation Contribution Guide
+Welcome contributors! To maintain consistency and quality in our documentation, please follow these guidelines when adding or updating documentation for models:
+
+**Structure of Model Documentation:**
+
+Each model should have its own Markdown file in the `/docs` directory (e.g., `docs/MYMODEL.md`). The file should generally follow this structure:
+
+1.  **Model Name Heading:** (e.g., `# MyModel Module`)
+2.  **Brief Description:** A short explanation of what the model represents and its purpose.
+3.  **Model Definition:** The TypeScript type definition for the model.
+4.  **DTO Definitions:** TypeScript type definitions for `CreateMyModelDTO` and `UpdateMyModelDTO` (if applicable).
+5.  **Example Usage Heading:** (e.g., `## Example Usage`)
+6.  **CRUD Operations:**
+    *   For each standard operation (Create, Find (List), FindById, Update, Delete):
+        *   A subheading (e.g., `### Creating a MyModel`).
+        *   A code snippet in TypeScript showing how to use the SDK method.
+        *   An example JSON response for the operation. If an operation returns no content (e.g., `updateById`, `deleteById` often return `Promise<void>`), note this and optionally provide guidance on how to verify the operation's success (e.g., by attempting to fetch the resource afterwards or by confirming the promise resolves without error). Ensure all placeholders like `ozmapURL` and `yourApiKey` are clearly indicated.
+
+**Key Guidelines:**
+
+*   **Clarity:** Write clear and concise descriptions.
+*   **Completeness:** Ensure all CRUD operations are documented with code examples and their respective JSON responses.
+*   **Accuracy:** Keep documentation synchronized with any changes in the SDK's models, DTOs, or methods.
+*   **Consistency:** Follow the style and formatting of existing documentation files. Refer to other files in the `docs/` directory as a template.
+
+Your contributions to improving and expanding the documentation are highly appreciated!
 
 ## API
 

@@ -10,14 +10,20 @@ Defines the structure for connectors.
 
 ```typescript
 type Connector = {
-  kind: NetworkConnectorKind.CONNECTOR;
-  connectables: Array<string | null>;
-  connectorType: string;
-  parent: string | BaseConnectorSchema;
-  project: string | ProjectSchema;
-  connectorType: string | ConnectorTypeSchema;
-  connectables: Array<string | NetworkConnectableSchema | null>;
-  // other properties from NetworkConnectorSchema and ConnectorDataSchema
+  _id: string;
+  id: string;
+  kind: 'Connector'; // Simplified from NetworkConnectorKind.CONNECTOR
+  name?: string;
+  parent: string; // ID of the parent entity (e.g., Box, DIO)
+  project: string; // ID of the project
+  connectorType: string; // ID of the ConnectorType
+  connectables: (string | null)[]; // Array of IDs of connected entities or null
+  isDrop?: boolean;
+  attenuation?: number;
+  tags?: string[];
+  createdAt: string | Date;
+  updatedAt: string | Date;
+  // Additional properties from NetworkConnectorSchema might be relevant depending on usage
 };
 ```
 
@@ -26,7 +32,12 @@ type Connector = {
 Defines the structure for creating a connector.
 
 ```typescript
-type CreateConnectorDTO = Partial<Connector> & {
+type CreateConnectorDTO = {
+  parent: string; // ID of the parent entity (e.g., Box, DIO)
+  connectorType: string; // ID of the ConnectorType
+  name?: string;
+  attenuation?: number;
+  tags?: string[];
   external_id?: any;
 };
 ```
@@ -36,7 +47,12 @@ type CreateConnectorDTO = Partial<Connector> & {
 Defines the structure for updating a connector.
 
 ```typescript
-type UpdateConnectorDTO = Partial<Connector> & {
+type UpdateConnectorDTO = {
+  parent?: string; // ID of the parent entity (e.g., Box, DIO)
+  connectorType?: string; // ID of the ConnectorType
+  name?: string;
+  attenuation?: number;
+  tags?: string[];
   external_id?: any;
 };
 ```
@@ -47,34 +63,58 @@ type UpdateConnectorDTO = Partial<Connector> & {
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { CreateConnectorDTO } from './Connector';
+// import { CreateConnectorDTO } from './Connector'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const newConnectorData: CreateConnectorDTO = {
-  connectorType: 'ConnectorTypeId',
+const newConnectorData = { // CreateConnectorDTO type assumed to be available
+  parent: 'parentId123', // e.g., ID of a Box or DIO
+  connectorType: 'connectorTypeIdABC',
+  name: 'CON-001',
+  // attenuation, tags, external_id are optional
 };
 
 sdk.connector.create(newConnectorData).then((connector) => {
   console.log('Connector created:', connector);
 });
 ```
+Response example:
+```json
+{
+  "_id": "connectorIdXYZ",
+  "parent": "parentId123",
+  "connectorType": "connectorTypeIdABC",
+  "name": "CON-001",
+  "kind": "Connector",
+  "project": "projectIdAssociatedWithParent",
+  "connectables": [null, null], // Example for a 2-position connector
+  "isDrop": false,
+  "attenuation": 0.25, // Example default or calculated value
+  "tags": [],
+  "createdAt": "2023-10-28T16:00:00.000Z",
+  "updatedAt": "2023-10-28T16:00:00.000Z",
+  "id": "connectorIdXYZ"
+}
+```
 
 ### Update a Connector
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { UpdateConnectorDTO } from './Connector';
+// import { UpdateConnectorDTO } from './Connector'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const updateConnectorData: UpdateConnectorDTO = {
+const updateConnectorData = { // UpdateConnectorDTO type assumed to be available
   connectorType: 'updatedConnectorTypeId',
+  name: "CON-001-Renamed"
 };
 
 sdk.connector.updateById('connectorId', updateConnectorData).then(() => {
   console.log('Connector updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 ### Fetching Connectors
 
@@ -83,9 +123,35 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-sdk.Connector.find({ page: 1, limit: 10 }).then((pagination) => {
+sdk.connector.find({ page: 1, limit: 10 }).then((pagination) => { // Corrected to sdk.connector
   console.log('Connector:', pagination);
 });
+```
+Response example:
+```json
+{
+  "total": 1,
+  "count": 1,
+  "rows": [
+    {
+      "_id": "connectorIdXYZ",
+      "parent": "parentId123",
+      "connectorType": "connectorTypeIdABC",
+      "name": "CON-001",
+      "kind": "Connector",
+      "project": "projectIdAssociatedWithParent",
+      "connectables": [null, "someConnectableId"],
+      "isDrop": false,
+      "attenuation": 0.25,
+      "tags": ["tag1"],
+      "createdAt": "2023-10-28T16:00:00.000Z",
+      "updatedAt": "2023-10-28T16:05:00.000Z",
+      "id": "connectorIdXYZ"
+    }
+  ],
+  "start": 0,
+  "limit": 1
+}
 ```
 
 ### Fetching a Connector by ID
@@ -95,9 +161,27 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-sdk.Connector.findById('ConnectorId').then((Connector) => {
-  console.log('Connector:', Connector);
+sdk.connector.findById('connectorIdXYZ').then((connector) => { // Corrected to sdk.connector and variable name
+  console.log('Connector:', connector);
 });
+```
+Response example:
+```json
+{
+  "_id": "connectorIdXYZ",
+  "parent": "parentId123",
+  "connectorType": "connectorTypeIdABC",
+  "name": "CON-001",
+  "kind": "Connector",
+  "project": "projectIdAssociatedWithParent",
+  "connectables": [null, "someConnectableId"],
+  "isDrop": false,
+  "attenuation": 0.25,
+  "tags": ["tag1", "important"],
+  "createdAt": "2023-10-28T16:00:00.000Z",
+  "updatedAt": "2023-10-28T16:05:00.000Z",
+  "id": "connectorIdXYZ"
+}
 ```
 
 ### Deleting a Connector
@@ -107,7 +191,9 @@ import OZMapSDK from 'ozmapsdk';
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-sdk.Connector.deleteById('ConnectorId').then(() => {
+sdk.connector.deleteById('connectorIdXYZ').then(() => { // Corrected to sdk.connector
   console.log('Connector deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```

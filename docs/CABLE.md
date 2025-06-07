@@ -104,11 +104,11 @@ type UpdateCableDTO = {
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { CreateCableDTO } from './Cable';
+// import { CreateCableDTO } from './Cable'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const newCableData: CreateCableDTO = {
+const newCableData = { // CreateCableDTO type assumed to be available
   project: 'projectId',
   cableType: 'cableTypeId',
   poles: [
@@ -126,11 +126,11 @@ sdk.cable.create(newCableData).then((cable) => {
 
 ```typescript
 import OZMapSDK from 'ozmapsdk';
-import { UpdateCableDTO } from './Cable';
+// import { UpdateCableDTO } from './Cable'; // DTO type assumed to be available
 
 const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 
-const updateCableData: UpdateCableDTO = {
+const updateCableData = { // UpdateCableDTO type assumed to be available
   color: 'newColorId',
   orientationA: 'newOrientationA',
   orientationB: 'newOrientationB',
@@ -141,6 +141,8 @@ const updateCableData: UpdateCableDTO = {
 sdk.cable.updateById('cableId', updateCableData).then(() => {
   console.log('Cable updated');
 });
+// The updateById method returns a Promise<void>.
+// To confirm the update, you can re-fetch the entity or ensure the promise resolves successfully.
 ```
 
 ### Fetching Cables
@@ -177,4 +179,6 @@ const sdk = new OZMapSDK('ozmapURL', { apiKey: 'yourApiKey' });
 sdk.cable.deleteById('cableId').then(() => {
   console.log('Cable deleted');
 });
+// The deleteById method returns a Promise<void>.
+// To confirm the deletion, you can attempt to fetch the entity (expecting an error/null) or ensure the promise resolves successfully.
 ```
